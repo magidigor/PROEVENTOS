@@ -1,14 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using ProEventos.Persistence;
-using ProEventos.Domain;
-using ProEventos.Persistence.Contextos;
 using ProEventos.Application.Contratos;
 using Microsoft.AspNetCore.Http;
+using ProEventos.Application.Dtos;
 
 namespace ProEventos.API.Controllers
 {
@@ -27,10 +23,26 @@ namespace ProEventos.API.Controllers
         {
             try
             {
-                var evento = await _eventoService.GetAllEventosByAsync(true);
-                if (evento == null) return NotFound("Nenhum evento encontrado.");
+                var eventos = await _eventoService.GetAllEventosByAsync(true);
+                if (eventos == null) return NoContent();
 
-                return Ok(evento);
+                var eventosRetorno = new List<EventoDto>();
+                
+                foreach (var evento in eventos)
+                {
+                    eventosRetorno.Add(new EventoDto() {
+                        Id = evento.Id,
+                        Local = evento.Local,
+                        DataEvento = evento.DataEvento.ToString(),
+                        Tema = evento.Tema,
+                        QtdPessoas = evento.QtdPessoas,
+                        ImagemURL = evento.ImagemURL,
+                        Telefone = evento.Telefone,
+                        Email = evento.Email
+                    });
+                }
+
+                return Ok(eventosRetorno);
             }
             catch (Exception ex)
             {                
@@ -45,7 +57,7 @@ namespace ProEventos.API.Controllers
             try
             {
                 var evento = await _eventoService.GetEventoByIdAsync(id, true);
-                if (evento == null) return NotFound("Nenhum evento por ID encontrado.");
+                if (evento == null) return NoContent();
 
                 return Ok(evento);
             }
@@ -62,7 +74,7 @@ namespace ProEventos.API.Controllers
             try
             {
                 var evento = await _eventoService.GetAllEventosByTemaAsync(tema, true);
-                if (evento == null) return NotFound("Nenhum evento por tema encontrado.");
+                if (evento == null) return NoContent();
 
                 return Ok(evento);
             }
@@ -74,12 +86,12 @@ namespace ProEventos.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post(Evento model)
+        public async Task<IActionResult> Post(EventoDto model)
         {
             try
             {
                 var evento = await _eventoService.AddEventos(model);
-                if (evento == null) return BadRequest("Erro ao tentar adicionar evento.");
+                if (evento == null) return NoContent();
 
                 return Ok(evento);
             }
@@ -91,12 +103,12 @@ namespace ProEventos.API.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, Evento model)
+        public async Task<IActionResult> Put(int id, EventoDto model)
         {
             try
             {
                 var evento = await _eventoService.UpdateEvento(id,model);
-                if (evento == null) return BadRequest("Erro ao tentar atualizar evento.");
+                if (evento == null) return NoContent();
 
                 return Ok(evento);
             }
@@ -112,7 +124,12 @@ namespace ProEventos.API.Controllers
         {
             try
             {
-                return await _eventoService.DeleteEvento(id) ? Ok("Deletado") : BadRequest("Evento não deletado.");
+                var evento = await _eventoService.GetEventoByIdAsync(id, true);
+                if (evento == null) return NoContent();
+
+                return await _eventoService.DeleteEvento(id) ? 
+                        Ok("Deletado") : 
+                        throw new Exception("Ocorreu um problema não especificado ao tentar deletar Evento.");
             }
             catch (Exception ex)
             {                
