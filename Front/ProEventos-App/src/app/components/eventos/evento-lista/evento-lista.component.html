@@ -47,7 +47,7 @@
         <td class="d-none d-md-table-cell">
           <img [collapse]="!exibirImagem"
               [isAnimated]="true"
-            src="/assets/{{evento.imagemURL}}" alt=""
+            [src]="retornaImagem(evento.imagemURL)" alt=""
             [style.width.px]="larguraImagem"
             [style.margin.px]="margenImagem"
           >
@@ -57,8 +57,7 @@
         <td class="d-none d-md-table-cell">{{evento.local}}</td>
         <td>{{evento.dataEvento | DateFormatPipe}}</td>
         <td class="d-none d-md-table-cell">{{evento.qtdPessoas}}</td>
-        <td class="d-none d-md-table-cell"></td>
-        <!-- <td class="d-none d-md-table-cell">{{evento.lotes[0]?.nome | uppercase}}</td> -->
+        <td class="d-none d-md-table-cell">{{evento.lotes[0]?.nome | uppercase}}</td>
         <td>
           <div class="btn-group">
             <button type="button" class="btn btn-danger btn-lg" tooltip="Excluir" (click)="openModal($event, template, evento.id)">

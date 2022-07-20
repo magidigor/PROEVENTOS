@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.Threading.Tasks;
 using AutoMapper;
 using ProEventos.Application.Contratos;
@@ -74,7 +75,6 @@ namespace ProEventos.Application
             try
             {
                 var evento = await _eventoPersist.GetEventoByIdAsync(eventoId, false);
-
                 if (evento == null) throw new Exception("Evento para delete não foi encontrado.");
 
                 _geralPersist.Delete(evento); 
@@ -90,7 +90,7 @@ namespace ProEventos.Application
         public async Task<EventoDto[]> GetAllEventosByAsync(bool incluirPalestrantes = false)
         {
             try
-            {
+            {                
                 var eventos = await _eventoPersist.GetAllEventosByAsync(incluirPalestrantes);
                 if (eventos == null) return null;;
 
@@ -107,7 +107,7 @@ namespace ProEventos.Application
         public async Task<EventoDto[]> GetAllEventosByTemaAsync(string tema, bool incluirPalestrantes = false)
         {
             try
-            {
+            {                
                 var eventos = await _eventoPersist.GetAllEventosByTemaAsync(tema, incluirPalestrantes);
                 if (eventos == null) return null;;
 
@@ -124,7 +124,7 @@ namespace ProEventos.Application
         public async Task<EventoDto> GetEventoByIdAsync(int eventoId, bool incluirPalestrantes = false)
         {
             try
-            {
+            {                
                 var evento = await _eventoPersist.GetEventoByIdAsync(eventoId, incluirPalestrantes);
                 if (evento == null) return null;
 
