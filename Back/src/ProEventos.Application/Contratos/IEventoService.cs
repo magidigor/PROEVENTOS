@@ -5,13 +5,13 @@ namespace ProEventos.Application.Contratos
 {
     public interface IEventoService
     {
-        Task<EventoDto> AddEventos(EventoDto model);
-        Task<EventoDto> UpdateEvento(int eventoId, EventoDto model);
-        Task<bool> DeleteEvento(int eventoId);
+        Task<EventoDto> AddEventos(int userId, EventoDto model);
+        Task<EventoDto> UpdateEvento(int userId, int eventoId, EventoDto model);
+        Task<bool> DeleteEvento(int userId, int eventoId);
 
-        Task<EventoDto[]> GetAllEventosByAsync(bool incluirPalestrantes = false);
-        Task<EventoDto[]> GetAllEventosByTemaAsync(string tema, bool incluirPalestrantes = false);
-        Task<EventoDto> GetEventoByIdAsync(int eventoId, bool incluirPalestrantes = false); 
+        Task<EventoDto[]> GetAllEventosByAsync(int userId, bool incluirPalestrantes = false);
+        Task<EventoDto[]> GetAllEventosByTemaAsync(int userId, string tema, bool incluirPalestrantes = false);
+        Task<EventoDto> GetEventoByIdAsync(int userId, int eventoId, bool incluirPalestrantes = false); 
         
     }
 }
