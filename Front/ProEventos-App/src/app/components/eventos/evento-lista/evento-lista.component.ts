@@ -75,7 +75,7 @@ export class EventoListaComponent implements OnInit {
       error: (error: any) => {
         this.spinner.hide();
         this.toastr.error('Erro ao Carregar os Eventos', 'Erro!');
-        console.log(error);
+        console.error(error);
       },
       complete: () => this.spinner.hide()
     });

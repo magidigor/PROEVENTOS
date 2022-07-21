@@ -1,6 +1,6 @@
 import { LOCALE_ID, CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
@@ -20,6 +20,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NavComponent } from './shared/nav/nav.component';
 
+import { HomeComponent } from './components/home/home.component';
 import { EventosComponent } from './components/eventos/eventos.component';
 import { PalestrantesComponent } from './components/palestrantes/palestrantes.component';
 import { ContatosComponent } from './components/contatos/contatos.component';
@@ -31,6 +32,9 @@ import { TituloComponent } from './shared/titulo/titulo.component';
 
 import { EventoService } from './services/evento.service';
 import { LoteService } from './services/lote.service';
+import { AccountService } from './services/account.service';
+
+import { JwtInterceptor } from './interceptor/jwt.interceptor';
 
 import { DateTimeFormatPipe } from './helpers/DateTimeFormat.pipe';
 import { EventoListaComponent } from './components/eventos/evento-lista/evento-lista.component';
@@ -59,6 +63,7 @@ defineLocale('pt-br', ptBrLocale);
     DateTimeFormatPipe,
     EventoDetalheComponent,
     EventoListaComponent,
+    HomeComponent,
     UserComponent,
     LoginComponent,
     RegistrationComponent
@@ -87,7 +92,9 @@ defineLocale('pt-br', ptBrLocale);
   providers: [
     EventoService,
     LoteService,
-    { provide: LOCALE_ID, useValue: 'pt-br' }
+    AccountService,
+    { provide: LOCALE_ID, useValue: 'pt-br' },
+    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true}
   ],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
