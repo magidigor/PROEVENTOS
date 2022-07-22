@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ProEventos.Domain;
+using ProEventos.Persistence.Models;
 
 namespace ProEventos.Persistence.Contratos
 {
-    public interface IPalestrantePersist
+    public interface IPalestrantePersist : IGeralPersist
     {
-        Task<Palestrante[]> GetAllPalestrantesByTemaAsync(string nome, bool incluirEventos = false);
-        Task<Palestrante[]> GetAllPalestrantesByAsync(bool incluirEventos = false);
-        Task<Palestrante> GetPalestranteByIdAsync(int palestranteId, bool incluirEventos = false);        
+        Task<PageList<Palestrante>> GetAllPalestrantesAsync(PageParams pageParams, bool incluirEventos = false);
+        Task<Palestrante> GetPalestranteByUserIdAsync(int userId, bool incluirEventos = false);        
     }
 }

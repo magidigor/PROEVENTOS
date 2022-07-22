@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using ProEventos.API.Extensions;
 using ProEventos.Application.Contratos;
 using ProEventos.Application.Dtos;
+using ProEventos.Application.Helpers;
 
 namespace ProEventos.API.Controllers
 {
@@ -18,16 +19,16 @@ namespace ProEventos.API.Controllers
     {
         private readonly IAccountService _accountService;
         private readonly ITokenService _tokenService;
-        //private readonly IUtil _util;
+        private readonly IUtil _util;
 
         private readonly string _destino = "Perfil";
 
         public AccountController(IAccountService accountService,
-                                 ITokenService tokenService //,
-                                 //IUtil util
+                                 ITokenService tokenService,
+                                 IUtil util
                                  )
         {
-            //_util = util;
+            _util = util;
             _accountService = accountService;
             _tokenService = tokenService;
         }
@@ -139,11 +140,11 @@ namespace ProEventos.API.Controllers
 
                 var file = Request.Form.Files[0];
 
-                // if (file.Length > 0)
-                // {
-                //     _util.DeleteImage(user.ImagemURL, _destino);
-                //     user.ImagemURL = await _util.SaveImage(file, _destino);
-                // }
+                if (file.Length > 0)
+                {
+                    _util.DeleteImage(user.ImagemURL, _destino);
+                    user.ImagemURL = await _util.SaveImage(file, _destino);
+                }
 
                 var userRetorno = await _accountService.UpdateAccount(user);
 
